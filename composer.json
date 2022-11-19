@@ -1,0 +1,48 @@
+{
+    "name": "clarkwinkelmann/flarum-ext-sudo-mode",
+    "description": "Transfer money to other users through post rewards",
+    "keywords": [
+        "flarum",
+        "security",
+        "administrator",
+        "sudo"
+    ],
+    "type": "flarum-extension",
+    "license": "MIT",
+    "require": {
+        "flarum/core": "^1.5"
+    },
+    "require-dev": {
+        "flarum/tags": "*"
+    },
+    "authors": [
+        {
+            "name": "Clark Winkelmann",
+            "homepage": "https://clarkwinkelmann.com/",
+            "email": "clark.winkelmann@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "source": "https://github.com/clarkwinkelmann/flarum-ext-sudo-mode"
+    },
+    "autoload": {
+        "psr-4": {
+            "ClarkWinkelmann\\SudoMode\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Sudo Mode",
+            "category": "feature",
+            "icon": {
+                "name": "fas fa-user-shield",
+                "backgroundColor": "#684ba6",
+                "color": "#fff"
+            },
+            "optional-dependencies": [
+                "flarum/tags"
+            ]
+        }
+    }
+}
