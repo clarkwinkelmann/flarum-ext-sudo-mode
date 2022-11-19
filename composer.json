@@ -1,6 +1,6 @@
 {
     "name": "clarkwinkelmann/flarum-ext-sudo-mode",
-    "description": "Transfer money to other users through post rewards",
+    "description": "Require password for critical operations",
     "keywords": [
         "flarum",
         "security",
