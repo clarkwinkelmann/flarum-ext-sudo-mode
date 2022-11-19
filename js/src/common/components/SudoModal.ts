@@ -56,9 +56,7 @@ export default class SudoModal extends Modal<SudoModalAttrs> {
             },
             errorHandler: this.onerror,
         }).then(response => {
-            console.log(response);
             if (typeof response === 'object' && response.expires) {
-                console.log('set', response.expires);
                 app.forum.data.attributes!.sudoModeExpires = response.expires;
             }
 

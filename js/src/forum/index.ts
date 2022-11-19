@@ -1,4 +1,4 @@
-import {extend, override} from 'flarum/common/extend';
+import {override} from 'flarum/common/extend';
 import app from 'flarum/forum/app';
 import User from 'flarum/common/models/User';
 import UserControls from 'flarum/forum/utils/UserControls';

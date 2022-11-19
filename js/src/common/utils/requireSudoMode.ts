@@ -10,7 +10,7 @@ import SudoModal from '../components/SudoModal';
  */
 export default function (): Promise<boolean> {
     const expires = app.forum.attribute<number>('sudoModeExpires') || 0;
-console.log('check', expires);
+
     if (expires > dayjs().unix()) {
         return Promise.resolve(false);
     }
