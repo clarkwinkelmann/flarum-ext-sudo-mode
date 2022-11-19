@@ -11,6 +11,7 @@ use Flarum\Http\Middleware\AuthenticateWithHeader;
 use Flarum\Http\Middleware\AuthenticateWithSession;
 use Flarum\Http\Middleware\CheckCsrfToken;
 use Flarum\Http\Middleware\ShareErrorsFromSession;
+use Flarum\Http\UrlGenerator;
 use Flarum\Tags\Tag;
 use Flarum\User\User;
 
@@ -49,10 +50,17 @@ return [
         ->insertAfter(AuthenticateWithSession::class, Middleware\RetrieveSudoMiddleware::class),
 
     (new Extend\ApiSerializer(ForumSerializer::class))
-        ->attributes(function (): array {
+        ->attributes(function (ForumSerializer $serializer): array {
             if (SudoGate::canUseAdminFeatures()) {
                 return [
                     'sudoModeExpires' => SudoGate::expectedExpirationTimestamp(),
+                ];
+            }
+
+            // When outside of sudo mode, the adminUrl would not be added. Re-add it like in ForumSerializer
+            if ($serializer->getActor()->isAdmin()) {
+                return [
+                    'adminUrl' => resolve(UrlGenerator::class)->to('admin')->base(),
                 ];
             }
 
