@@ -23,6 +23,9 @@ The following actions are protected by sudo mode:
 
 Once the UI for developer tokens is finalized in a future Flarum version, developer access tokens could be made to bypass sudo mode and at the same time creating new tokens could be protected by sudo mode.
 
+It's possible that you may be unable to see some restricted content on the forum pages until you enable sudo mode by going to the admin panel.
+Please open an issue if you notice any place where this happens.
+
 ## Installation
 
     composer require clarkwinkelmann/flarum-ext-sudo-mode
@@ -44,3 +47,4 @@ Support is offered on a "best effort" basis through the Flarum community thread.
 
 - [GitHub](https://github.com/clarkwinkelmann/flarum-ext-sudo-mode)
 - [Packagist](https://packagist.org/packages/clarkwinkelmann/flarum-ext-sudo-mode)
+- [Discuss](https://discuss.flarum.org/d/32006)
