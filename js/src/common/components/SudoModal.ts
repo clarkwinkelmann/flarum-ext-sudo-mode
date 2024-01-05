@@ -34,6 +34,12 @@ export default class SudoModal extends Modal<SudoModalAttrs> {
                     placeholder: app.translator.trans('clarkwinkelmann-sudo-mode.lib.sudo.password'),
                 }),
             ]),
+            'clarkwinkelmann-passwordless' in flarum.extensions && flarum.extensions['clarkwinkelmann-passwordless'].TokenRequest ? m(flarum.extensions['clarkwinkelmann-passwordless'].TokenRequest, {
+                errorHandler: this.onerror.bind(this),
+                onErrorClear: () => {
+                    this.alertAttrs = null;
+                },
+            }) : null,
             m('.Form-group', [
                 Button.component({
                     type: 'submit',
@@ -54,7 +60,7 @@ export default class SudoModal extends Modal<SudoModalAttrs> {
             body: {
                 password: this.password,
             },
-            errorHandler: this.onerror,
+            errorHandler: this.onerror.bind(this),
         }).then(response => {
             if (typeof response === 'object' && response.expires) {
                 app.forum.data.attributes!.sudoModeExpires = response.expires;
