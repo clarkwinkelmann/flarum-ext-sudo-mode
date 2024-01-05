@@ -2,6 +2,7 @@
 
 namespace ClarkWinkelmann\SudoMode;
 
+use Flarum\Foundation\Config;
 use Flarum\Http\RequestUtil;
 use Flarum\Locale\Translator;
 use Flarum\User\Exception\NotAuthenticatedException;
@@ -11,6 +12,7 @@ use Illuminate\Support\MessageBag;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Laminas\Diactoros\Response\TextResponse;
+use Laminas\Diactoros\Uri;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -18,10 +20,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 class SudoController implements RequestHandlerInterface
 {
     protected $translator;
+    protected $config;
 
-    public function __construct(Translator $translator)
+    public function __construct(Translator $translator, Config $config)
     {
         $this->translator = $translator;
+        $this->config = $config;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -37,7 +41,7 @@ class SudoController implements RequestHandlerInterface
 
         $actor = RequestUtil::getActor($request);
         $password = (string)Arr::get($request->getParsedBody(), 'password');
-        $redirect = (string)Arr::get($request->getParsedBody(), 'redirect');
+        $redirect = $this->sanitizeRedirectUrl((string)Arr::get($request->getParsedBody(), 'redirect'));
 
         if (!$actor->checkPassword($password)) {
             if ($redirect) {
@@ -67,5 +71,25 @@ class SudoController implements RequestHandlerInterface
         return new JsonResponse([
             'expires' => SudoGate::expectedExpirationTimestamp(),
         ]);
+    }
+
+    protected function sanitizeRedirectUrl(string $url): ?Uri
+    {
+        if (empty($url)) {
+            return null;
+        }
+
+        try {
+            $parsedUrl = new Uri($url);
+        } catch (\InvalidArgumentException $e) {
+            return null;
+        }
+
+        // We don't need something as fancy as Flarum's logout controller, because it doesn't make sense to go to any non-Flarum page after entering sudo mode
+        if ($parsedUrl->getHost() === $this->config->url()->getHost()) {
+            return $parsedUrl;
+        }
+
+        return null;
     }
 }
